@@ -8,6 +8,7 @@ const BookContextProvider = (props) => {
         {title: 'name of the wind', author: 'patric rothfuss', id: 1},
         {title: 'the final empire', author: 'brandon sanderson', id: 2}
     ]);
+    const [currentBook, setEditBook] = useState('')
     const addBook = (title, author) => {
         console.log(title, author)
         setBooks([...books, {title: title, author: author, id: uuidv1() }])
@@ -16,12 +17,19 @@ const BookContextProvider = (props) => {
         setBooks(books.filter(book => book.id !== id))
     }
     const updateBook = (id) => {
-        books.map((book) => {
-            console.log(book.id === id);
-        })
+        setEditBook(books.filter(book => book.id === id))
+    }
+    const editBook = (title, author,id) => {
+        setBooks(books.map(book => {
+            if(book.id === id){
+                return {title: title, author: author, id: id }
+            }else{
+                return book
+            }
+        }))
     }
     return (
-        <BookContext.Provider value={{books, addBook, removeBook, updateBook}}>
+        <BookContext.Provider value={{books, addBook, removeBook, currentBook,  updateBook, editBook}}>
             { props.children }
         </BookContext.Provider>
     )
